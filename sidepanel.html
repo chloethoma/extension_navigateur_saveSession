@@ -4,24 +4,26 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="popup.css" />
+  <link rel="stylesheet" href="sidepanel.css" />
   <title>Save tabs session</title>
 </head>
 
 <body>
   <template id="template">
-    <div>
+    <div class = "session">
       <a>
-        <h3 class="title">Title</h3>
+        <p class="title">Title</p>
+        <p>/</p>
         <p class="tabsNumber">Tab's number</p>
       </a>
     </div>
   </template>
 
   <h1>Save tabs Session</h1>
-  <button>Save tabs</button>
-  <div class="tabSession"></div>
+  <div class="tabsSessions"></div>
+  <button id="saveButton">Add tabs Session</button>
+  <button id="deleteButton">Delete All Sessions</button>
 
-  <script src="popup.js"></script>
+  <script src="sidepanel.js"></script>
 </body>
 </html>
