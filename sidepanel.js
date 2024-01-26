@@ -1,5 +1,7 @@
-// Itérations :
+// A faire :
 // Clean le code
+// Empêcher la sauvegarde d'une session si rien dans le prompt
+// changer le pointer CSS sur les titres, boutons
 
 // Print la liste des sessions à l'ouverture du SidePanel
 const printSessionList = async () => {
@@ -38,7 +40,7 @@ const deleteStorageAndClearSidePanel = async () => {
   }
 }
 
-// Supprime une session du storage + reprint la sessionList pour mise à jour sur le SidePanel
+// Remove une session du storage + reprint la sessionList pour mise à jour sur le SidePanel
 const deleteOneSession = async (event) => {
   // Récupère le titre de la session correspondant à l'event click
   const sessionTitle = event.target.parentNode.children[0].textContent

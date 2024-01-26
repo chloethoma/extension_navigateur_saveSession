@@ -1,28 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="sidepanel.css" />
   <title>Save tabs session</title>
 </head>
 
 <body>
   <template id="template">
-    <div class = "session">
-        <p class="title">Title</p>
-        <p>/</p>
-        <p class="tabsNumber">Tab's number</p>
-        <button class="deleteSession">X</button>
+    <div class="session">
+      <p class="title">Title</p>
+      <p class="separation">|</p>
+      <p class="tabsNumber">Tab's number</p>
+      <button class="deleteSession">X</button>
     </div>
   </template>
 
   <h1>Save tabs Session</h1>
   <div id="sessionList"></div>
-  <button id="saveButton">Save Session</button>
-  <button id="deleteAllSession">Delete All Sessions</button>
+  <div class="button">
+    <button id="saveButton" class="bottomButton">Save Session</button>
+    <button id="deleteAllSession" class="bottomButton">Delete All</button>
+  </div>
 
   <script src="sidepanel.js"></script>
 </body>
+
 </html>
