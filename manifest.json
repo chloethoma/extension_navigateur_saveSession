@@ -13,7 +13,7 @@
         "service_worker": "background.js"
     },
     "action":{
-        "default_title":"Click to open panel"
+        "default_title":"Click to open panel or with command Ctrl + B"
     },
     "side_panel":{
         "default_path":"sidepanel.html"

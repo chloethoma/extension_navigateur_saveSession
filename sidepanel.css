@@ -20,6 +20,7 @@
 .title {
     grid-column: 1/6;
     font-size:15px;
+    cursor:pointer
 }
 
 .separation {
@@ -34,7 +35,8 @@
 .deleteSession {
     grid-column: 10;
     height: 25px;
-    background-image: linear-gradient(to right, #D31027 0%, #EA384D 51%, #D31027 100%);
+    background-color: rgba(211, 16, 39, 0.8);
+    /* background-image: linear-gradient(to right, #D31027 0%, #EA384D 51%, #D31027 100%); */
     margin: 2px;
     padding: 2px 2px;
     text-align: center;
@@ -45,14 +47,15 @@
     box-shadow: 0 0 20px #eee;
     border-radius: 10px;
     display: block;
+    cursor:pointer
 }
 
-.deleteSession:hover {
+/* .deleteSession:hover {
     background-position: right center;
-    /* change the direction of the change here */
+    change the direction of the change here
     color: #fff;
     text-decoration: none;
-}
+} */
 
 .button {
     display: grid;
@@ -63,7 +66,8 @@
 .bottomButton {
     height: 25px;
     font-weight:bold;
-    background-image: linear-gradient(to right, #bdc3c7 0%, #2c3e50 51%, #bdc3c7 100%);
+    background-color: rgba(44, 62, 80, 0.7);
+    /* background-image: linear-gradient(to right, #bdc3c7 0%, #2c3e50 51%, #bdc3c7 100%); */
     margin: 10px;
     padding: 3px 3px;
     text-align: center;
@@ -74,13 +78,14 @@
     box-shadow: 0 0 20px #eee;
     border-radius: 10px;
     display: block;
+    cursor:pointer
 }
 
-.bottomButton:hover {
+/* .bottomButton:hover {
     background-position: right center;
     color: #fff;
     text-decoration: none;
-}
+} */
 
 #saveButton {
     grid-column: 1/3;
