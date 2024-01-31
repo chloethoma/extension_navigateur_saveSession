@@ -13,7 +13,7 @@
 </head>
 
 <body>
-  <template id="template">
+  <template class="template">
     <div class="session">
       <p class="title">Title</p>
       <p class="separation">|</p>
@@ -23,11 +23,11 @@
   </template>
 
   <h1>Save tabs Session</h1>
-  <div id="sessionList"></div>
-  <div class="button">
-    <button id="saveButton" class="bottomButton">Save Session</button>
-    <button id="deleteAllSession" class="bottomButton">Delete All</button>
+  <div class="saveSession">
+    <input class="inputSession" type="text" placeholder="Entrez un nom de session">
+    <button class="saveButton" class="bottomButton">Save Session</button>
   </div>
+  <div class="sessionList"></div>
 
   <script src="sidepanel.js"></script>
 </body>

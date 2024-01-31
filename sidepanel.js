@@ -1,7 +1,5 @@
 // A faire :
 // Clean le code
-// Empêcher la sauvegarde d'une session si rien dans le prompt
-// changer le pointer CSS sur les titres, boutons
 
 // Print la liste des sessions à l'ouverture du SidePanel
 const printSessionList = async () => {
@@ -9,7 +7,7 @@ const printSessionList = async () => {
   const sessionsFromStorage = await chrome.storage.local.get()
 
   // Reset et print toutes les infos dans le SidePanel (titre de la session et nombre de tabs)
-  document.getElementById("sessionList").innerHTML=""
+  document.querySelector(".sessionList").innerHTML=""
   for (const session in sessionsFromStorage) {
     printSession(sessionsFromStorage[session], session)
   }
@@ -19,25 +17,11 @@ printSessionList()
 // Print une session
 const printSession = (sessionArray, sessionTitle) => {
   // Print le template prédéfini dans index.html et insère le titre de la session et le nombre de tabs correspondant
-  const template = document.getElementById("template")
+  const template = document.querySelector(".template")
   const element = template.content.firstElementChild.cloneNode(true)
   element.querySelector(".title").textContent = sessionTitle
   element.querySelector(".tabsNumber").textContent = `${sessionArray.length} tabs`
-  document.getElementById("sessionList").append(element)
-}
-
-// Delete tout le storage et le SidePanel --> refaire deux fonctions séparées
-const deleteStorageAndClearSidePanel = async () => {
-  // Clear tout le storage
-  await chrome.storage.local.clear()
-
-  // Supprime tous les éléments enfants de la div Tabs Session
-  const parentDiv = document.getElementById("sessionList")
-  let childDiv = parentDiv.firstChild
-  while (childDiv) {
-    parentDiv.removeChild(childDiv)
-    childDiv = parentDiv.firstChild
-  }
+  document.querySelector(".sessionList").append(element)
 }
 
 // Remove une session du storage + reprint la sessionList pour mise à jour sur le SidePanel
@@ -60,33 +44,58 @@ const addSessionToTheList = async () => {
     return allTabsData
   }
 
-  const sessionTitle = prompt("Quel est le nom de ta session ?")
-  const sessionData = await getTabsData()
+  // Récupère la value de l'input
+  const inputSession = document.querySelector(".inputSession")
+  const inputValue = inputSession.value
 
+  // Ne fait rien si l'input ne contient rien
+  if (inputValue === "") {
+    return
+  }
+
+  // UpperCase la 1ère lettre du nom de la session
+  const sessionTitle = inputValue[0].toUpperCase() + inputValue.slice(1)
+  inputSession.value=""
+  const sessionData = await getTabsData()
+  
   // Enregistre les données dans le storage avec la clé = titre de la session
   await chrome.storage.local.set({ [sessionTitle]: sessionData })
-  // Print la session sur le sidePanel
-  printSession(sessionData, sessionTitle)
+  // Print toute la liste sur le sidePanel
+  printSessionList()
 }
 
 // Ouvre une nouvelle window avec toutes les tabs enregistrées
 const openSessionInNewWindow = async (event) => {
+  // Récupère les datas de la fenêtre actuelle pour vérifier si c'est une fenêtre de démarrage
+  const windowData = await chrome.tabs.query({ currentWindow: true })
+  const urlFirstTab = windowData[0].url
+  const idFirstTab = windowData[0].id
+
+  // Récupère le titre de la session qui a été cliqué, puis les data correpondants dans le storage, push les url des tabs dans un array
   const sessionTitle = event.target.parentNode.children[0].textContent
   const dataFromStorage = await chrome.storage.local.get()
   const urlArray = []
   for (const element of dataFromStorage[sessionTitle]) {
     urlArray.push(element.url)
   }
-  chrome.windows.create({ url: urlArray })
+
+  // Dans le cas où la fenêtre actuelle est une fenêtre de démarrage Google, création des onglets dans cette window
+  // Else, création d'une nouvelle window avec tous les tabs
+  if (urlFirstTab === "chrome://newtab/" && windowData.length === 1) {
+    for (const url of urlArray) {
+      chrome.tabs.create({url})
+      chrome.tabs.remove(idFirstTab)
+    }
+  } else {
+    chrome.windows.create({ url: urlArray })
+  }
+
 }
 
-document.getElementById("saveButton")
+document.querySelector(".saveButton")
   .addEventListener("click", addSessionToTheList)
 
-document.getElementById("deleteAllSession")
-  .addEventListener("click", deleteStorageAndClearSidePanel)
-
-document.getElementById("sessionList")
+document.querySelector(".sessionList")
   .addEventListener("click", (event) => {
     if (event.target.className === "deleteSession") {
       deleteOneSession(event)
