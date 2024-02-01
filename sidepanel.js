@@ -82,10 +82,11 @@ const openSessionInNewWindow = async (event) => {
   // Dans le cas où la fenêtre actuelle est une fenêtre de démarrage Google, création des onglets dans cette window
   // Else, création d'une nouvelle window avec tous les tabs
   if (urlFirstTab === "chrome://newtab/" && windowData.length === 1) {
-    for (const url of urlArray) {
-      chrome.tabs.create({url})
-      chrome.tabs.remove(idFirstTab)
-    }
+    // for (const url of urlArray) {
+    //   chrome.tabs.create({url})
+    // }
+    urlArray.forEach(url => chrome.tabs.create({url}))
+    chrome.tabs.remove(idFirstTab)
   } else {
     chrome.windows.create({ url: urlArray })
   }
