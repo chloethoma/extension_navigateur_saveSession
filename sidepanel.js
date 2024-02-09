@@ -21,6 +21,24 @@ const printSession = (sessionArray, sessionTitle) => {
   document.querySelector(".sessionList").append(element)
 }
 
+// Récupère les data des tabs ouverts dans la current Window
+const getTabsData = async () => {
+  let allTabsData = await chrome.tabs.query({ currentWindow: true })
+  return allTabsData
+}
+
+// Pour updater les tabs d'une session déjà enregitrée
+const refreshTabs = async (event) => {
+  // Récupère les data des tabs ouverts dans la current Window
+  const sessionData = await getTabsData()
+  // Récupère le titre de la session correspondant 
+  const sessionTitle = event.target.parentNode.firstElementChild.textContent
+  // Stock les data dans le storage
+  await chrome.storage.local.set({ [sessionTitle]: sessionData })
+  // Print toute la liste pour mise à jour
+  printSessionList()
+}
+
 // Remove une session du storage + reprint la sessionList pour mise à jour sur le SidePanel
 const deleteOneSession = async (event) => {
   // Récupère le titre de la session correspondant à l'event click
@@ -33,15 +51,7 @@ const deleteOneSession = async (event) => {
 
 // Récupère les datas de la current Window, enregistre les données dans le storage, demande un titre de session, print la session sur le sidePanel
 const addSessionToTheList = async () => {
-  // Récupère les data des tabs ouverts dans la current Window
-  const getTabsData = async () => {
-    // let currentWindow = await chrome.windows.getCurrent({})
-    // let allTabsData = await chrome.tabs.query({windowId:currentWindow.id})
-    let allTabsData = await chrome.tabs.query({ currentWindow: true })
-    return allTabsData
-  }
-
-  // Récupère la value de l'input
+  // Récupère la value de l'input pour le titre de la session
   const inputSession = document.querySelector(".inputSession")
   const inputValue = inputSession.value
 
