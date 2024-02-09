@@ -1,13 +1,15 @@
-# extension_navigateur_saveSession
-Extension navigateur Chrome - Save session
-JavaScript / HTML / CSS
+# SAVE SESSION 
 
 ## Description
-Cette extension permet la sauvegarde de tous les onglets ouverts dans une fenêtre pour les retrouver ensuite à tout moment.
-Affichage via le SidePanel.
+Web browser extension (Chrome)
+This extension allows you to save all the tabs open in a window and then find them any time.
+Display via SidePanel.
 
-## Utilisation
-- Télécharger les fichiers
-- Chrome > Gérer les extensions > Charger l'extension non empaquetée : sélectionner le dossier dans lequel les fichiers ont été téléchargés
-- Le SidePanel s'ouvre via l'icone de l'extension ou avec le raccourci Ctrl+B
+## Stack
+JavaScript / HTML / CSS
+
+## For use it
+- Download the files
+- Chrome > Manage extensions > Load unpackaged extesion : select the folder where the files were downloaded
+- The SidePanel can be opens with the extension icon or with the Ctrl+B shortcut
 

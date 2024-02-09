@@ -1,6 +1,3 @@
-// A faire :
-// Clean le code
-
 // Print la liste des sessions à l'ouverture du SidePanel
 const printSessionList = async () => {
   // Récupère les infos qui on été stockées dans le storage
@@ -90,7 +87,6 @@ const openSessionInNewWindow = async (event) => {
   } else {
     chrome.windows.create({ url: urlArray })
   }
-
 }
 
 document.querySelector(".saveButton")
@@ -100,6 +96,8 @@ document.querySelector(".sessionList")
   .addEventListener("click", (event) => {
     if (event.target.className === "deleteSession") {
       deleteOneSession(event)
+    } else if (event.target.className === 'img') {
+      refreshTabs(event)
     } else if (event.target.parentNode.className === "session") {
       openSessionInNewWindow(event)
     }
