@@ -1,9 +1,8 @@
-// Print la liste des sessions à l'ouverture du SidePanel
+/*
+  Injecte dans la div .sessionList la liste des sessions disponibles dans le localstorage
+*/
 const printSessionList = async () => {
-  // Récupère les infos qui on été stockées dans le storage
   const sessionsFromStorage = await chrome.storage.local.get()
-
-  // Reset et print toutes les infos dans le SidePanel (titre de la session et nombre de tabs)
   document.querySelector(".sessionList").innerHTML=""
   for (const session in sessionsFromStorage) {
     printSession(sessionsFromStorage[session], session)
@@ -11,9 +10,10 @@ const printSessionList = async () => {
 }
 printSessionList()
 
-// Print une session
+/*
+  Injecte dans la div .sessionList une session avec le <template> préfédini dans index.html
+*/
 const printSession = (sessionArray, sessionTitle) => {
-  // Print le template prédéfini dans index.html et insère le titre de la session et le nombre de tabs correspondant
   const template = document.querySelector(".template")
   const element = template.content.firstElementChild.cloneNode(true)
   element.querySelector(".title").textContent = sessionTitle
@@ -21,37 +21,41 @@ const printSession = (sessionArray, sessionTitle) => {
   document.querySelector(".sessionList").append(element)
 }
 
-// Récupère les data des tabs ouverts dans la current Window
+/*
+  Récupère les data des tabs dans la fenêtre actuelle
+*/
 const getTabsData = async () => {
   let allTabsData = await chrome.tabs.query({ currentWindow: true })
   return allTabsData
 }
 
-// Pour updater les tabs d'une session déjà enregitrée
+/*
+  Update les tabs d'une session déjà enregitrée (bouton refresh)
+*/
 const refreshTabs = async (event) => {
-  // Récupère les data des tabs ouverts dans la current Window
   const sessionData = await getTabsData()
-  // Récupère le titre de la session correspondant 
   const sessionTitle = event.target.parentNode.firstElementChild.textContent
-  // Stock les data dans le storage
   await chrome.storage.local.set({ [sessionTitle]: sessionData })
-  // Print toute la liste pour mise à jour
   printSessionList()
 }
 
-// Remove une session du storage + reprint la sessionList pour mise à jour sur le SidePanel
-const deleteOneSession = async (event) => {
-  // Récupère le titre de la session correspondant à l'event click
+/*
+  Supprime une session :
+  Remove la session du storage + réinjecte la sessionList à jour
+*/
+const deleteSession = async (event) => {
   const sessionTitle = event.target.parentNode.children[0].textContent
-  // Delete la session correspondante stockée dans le storage
   await chrome.storage.local.remove([sessionTitle])
-  // Reprint la sessionList dans le SidePanel
   printSessionList()
 }
 
-// Récupère les datas de la current Window, enregistre les données dans le storage, demande un titre de session, print la session sur le sidePanel
+
+/*
+  Sauvegarde une session :
+  Récupère les datas de la current Window, enregistre les données dans le storage.
+  Recupère le titre de session dans l'input, injecte la sessionList sur le sidePanel
+*/
 const addSessionToTheList = async () => {
-  // Récupère la value de l'input pour le titre de la session
   const inputSession = document.querySelector(".inputSession")
   const inputValue = inputSession.value
 
@@ -65,13 +69,13 @@ const addSessionToTheList = async () => {
   inputSession.value=""
   const sessionData = await getTabsData()
   
-  // Enregistre les données dans le storage avec la clé = titre de la session
   await chrome.storage.local.set({ [sessionTitle]: sessionData })
-  // Print toute la liste sur le sidePanel
   printSessionList()
 }
 
-// Ouvre une nouvelle window avec toutes les tabs enregistrées
+/*
+  Ouvre une nouvelle fenêtre avec tous les tabs restaurés, lors du click sur la session que l'utilisateur souhaite ouvrir :
+*/
 const openSessionInNewWindow = async (event) => {
   // Récupère les datas de la fenêtre actuelle pour vérifier si c'est une fenêtre de démarrage
   const windowData = await chrome.tabs.query({ currentWindow: true })
@@ -89,9 +93,6 @@ const openSessionInNewWindow = async (event) => {
   // Dans le cas où la fenêtre actuelle est une fenêtre de démarrage Google, création des onglets dans cette window
   // Else, création d'une nouvelle window avec tous les tabs
   if (urlFirstTab === "chrome://newtab/" && windowData.length === 1) {
-    // for (const url of urlArray) {
-    //   chrome.tabs.create({url})
-    // }
     urlArray.forEach(url => chrome.tabs.create({url}))
     chrome.tabs.remove(idFirstTab)
   } else {
@@ -105,8 +106,8 @@ document.querySelector(".saveButton")
 document.querySelector(".sessionList")
   .addEventListener("click", (event) => {
     if (event.target.className === "deleteSession") {
-      deleteOneSession(event)
-    } else if (event.target.className === 'img') {
+      deleteSession(event)
+    } else if (event.target.className === 'refresh_img') {
       refreshTabs(event)
     } else if (event.target.parentNode.className === "session") {
       openSessionInNewWindow(event)
