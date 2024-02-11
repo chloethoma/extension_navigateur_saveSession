@@ -32,11 +32,14 @@ const getTabsData = async () => {
 /*
   Update les tabs d'une session déjà enregitrée (bouton refresh)
 */
-const refreshTabs = async (event) => {
+const refreshTabs = async () => {
   const sessionData = await getTabsData()
-  const sessionTitle = event.target.parentNode.firstElementChild.textContent
-  await chrome.storage.local.set({ [sessionTitle]: sessionData })
-  printSessionList()
+  console.log(sessionData)
+
+
+  // const sessionTitle = event.target.parentNode.firstElementChild.textContent
+  // await chrome.storage.local.set({ [sessionTitle]: sessionData })
+  // printSessionList()
 }
 
 /*
@@ -103,12 +106,13 @@ const openSessionInNewWindow = async (event) => {
 document.querySelector(".saveButton")
   .addEventListener("click", addSessionToTheList)
 
+document.querySelector(".refresh_img")
+  .addEventListener("click", refreshTabs)
+
 document.querySelector(".sessionList")
   .addEventListener("click", (event) => {
     if (event.target.className === "deleteSession") {
       deleteSession(event)
-    } else if (event.target.className === 'refresh_img') {
-      refreshTabs(event)
     } else if (event.target.parentNode.className === "session") {
       openSessionInNewWindow(event)
     }
