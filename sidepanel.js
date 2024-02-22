@@ -52,10 +52,10 @@ const deleteSession = async (event) => {
 
 /*
   Sauvegarde une session :
-  Récupère les datas de la current Window, enregistre les données dans le storage.
+  Récupère les datas de la current Window, enregistre les données dans le storage. 
   Recupère le titre de session dans l'input, injecte la sessionList sur le sidePanel
 */
-const addSessionToTheList = async () => {
+const addSession = async () => {
   const inputSession = document.querySelector(".inputSession")
   const inputValue = inputSession.value
 
@@ -74,9 +74,9 @@ const addSessionToTheList = async () => {
 }
 
 /*
-  Ouvre une nouvelle fenêtre avec tous les tabs restaurés, lors du click sur la session que l'utilisateur souhaite ouvrir :
+  Ouvre une nouvelle fenêtre avec tous les tabs restaurés, lors du click sur la session que l'utilisateur souhaite ouvrir
 */
-const openSessionInNewWindow = async (event) => {
+const openSession = async (event) => {
   // Récupère les datas de la fenêtre actuelle pour vérifier si c'est une fenêtre de démarrage
   const windowData = await chrome.tabs.query({ currentWindow: true })
   const urlFirstTab = windowData[0].url
@@ -101,7 +101,7 @@ const openSessionInNewWindow = async (event) => {
 }
 
 document.querySelector(".saveButton")
-  .addEventListener("click", addSessionToTheList)
+  .addEventListener("click", addSession)
 
 document.querySelector(".sessionList")
   .addEventListener("click", (event) => {
@@ -110,7 +110,7 @@ document.querySelector(".sessionList")
     } else if (event.target.className === 'refresh_img') {
       refreshTabs(event)
     } else if (event.target.parentNode.className === "session") {
-      openSessionInNewWindow(event)
+      openSession(event)
     }
   })
 
