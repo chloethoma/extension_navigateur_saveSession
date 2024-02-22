@@ -59,13 +59,12 @@ const deleteSession = async (event) => {
   printSessionList()
 }
 
-
 /*
   Sauvegarde une session :
   Récupère les datas de la current Window, enregistre les données dans le storage.
   Recupère le titre de session dans l'input, injecte la sessionList sur le sidePanel
 */
-const addSessionToTheList = async () => {
+const addSession = async () => {
   const inputSession = document.querySelector(".inputSession")
   const inputValue = inputSession.value
 
@@ -83,18 +82,18 @@ const addSessionToTheList = async () => {
   printSessionList()
 }
 
-/*
-  Ouvre une nouvelle fenêtre avec tous les tabs restaurés, lors du click sur la session que l'utilisateur souhaite ouvrir
 
-  !! A FIXER !!
+/*
+Ouvre une nouvelle fenêtre avec tous les tabs restaurés, lors du click sur la session que l'utilisateur souhaite ouvrir
+!! A FIXER !!
 */
-const openSessionInNewWindow = async (event) => {
+const openSession = async (event) => {
   // Récupère les datas de la fenêtre actuelle pour vérifier si c'est une fenêtre de démarrage
   const windowData = await chrome.tabs.query({ currentWindow: true })
   const urlFirstTab = windowData[0].url
   const idFirstTab = windowData[0].id
 
-  // Récupère le titre de la session qui a été cliqué, puis les data correpondants dans le storage, push les url des tabs dans un array
+   // Récupère le titre de la session qui a été cliqué, puis les data correpondants dans le storage, push les url des tabs dans un array
   const sessionTitle = event.target.parentNode.children[0].textContent
   const dataFromStorage = await chrome.storage.local.get()
   const urlArray = []
@@ -110,20 +109,19 @@ const openSessionInNewWindow = async (event) => {
   } else {
     chrome.windows.create({ url: urlArray })
   }
+  console.log("précédent windowId ; ", windowData[0].windowId)
 
-  // Problème : récupère l'id de la window au moment du click, donc pas la bonne window !
-  // Delete getTabsData et changer la requête pour récupérer l'id de la dernière window APRES LE CLICK !
-  // Est-ce qu'on peut lancer une fonction après un temps donné (quelques secondes ?) ?
+  
   const newTabsData = await getTabsData()
   const newWindowId = newTabsData[0].windowId
-  console.log(newWindowId, windowData)
+  console.log("le nouvel id qui est censé être différent de celui des data précédentes : ", newWindowId)
   console.log(newTabsData)
   // const test = await chrome.storage.local.set({ [sessionTitle]: newTabsData })
   // console.log(test)
 }
 
 document.querySelector(".saveButton")
-  .addEventListener("click", addSessionToTheList)
+  .addEventListener("click", addSession)
 
 document.querySelector(".refresh_img")
   .addEventListener("click", refreshTabs)
@@ -133,7 +131,7 @@ document.querySelector(".sessionList")
     if (event.target.className === "deleteSession") {
       deleteSession(event)
     } else if (event.target.parentNode.className === "session") {
-      openSessionInNewWindow(event)
+      openSession(event)
     }
   })
 
