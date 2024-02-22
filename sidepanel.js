@@ -31,18 +31,18 @@ const getTabsData = async () => {
 
 /*
   Update les tabs d'une session déjà enregitrée (bouton refresh)
+
+  !! A changer, après avoir résolu le problème de la windowId !!
 */
 const refreshTabs = async () => {
   const currentData = await getTabsData()
   const currentWindowId = currentData[0].windowId
   const storageData = await chrome.storage.local.get()
 
-  for (const session in storageData) {
-    if (storageData[session][0].windowId === currentWindowId)
-      console.log(session)
-  }
-
-
+  // for (const session in storageData) {
+  //   if (storageData[session][0].windowId === currentWindowId)
+  //     console.log(session)
+  // }
 
   // const sessionTitle = event.target.parentNode.firstElementChild.textContent
   // await chrome.storage.local.set({ [sessionTitle]: sessionData })
@@ -84,7 +84,9 @@ const addSessionToTheList = async () => {
 }
 
 /*
-  Ouvre une nouvelle fenêtre avec tous les tabs restaurés, lors du click sur la session que l'utilisateur souhaite ouvrir :
+  Ouvre une nouvelle fenêtre avec tous les tabs restaurés, lors du click sur la session que l'utilisateur souhaite ouvrir
+
+  !! A FIXER !!
 */
 const openSessionInNewWindow = async (event) => {
   // Récupère les datas de la fenêtre actuelle pour vérifier si c'est une fenêtre de démarrage
@@ -109,9 +111,15 @@ const openSessionInNewWindow = async (event) => {
     chrome.windows.create({ url: urlArray })
   }
 
+  // Problème : récupère l'id de la window au moment du click, donc pas la bonne window !
+  // Delete getTabsData et changer la requête pour récupérer l'id de la dernière window APRES LE CLICK !
+  // Est-ce qu'on peut lancer une fonction après un temps donné (quelques secondes ?) ?
   const newTabsData = await getTabsData()
-  // const newWindowId = newTabsData[0].windowId
-  await chrome.storage.local.set({ [sessionTitle]: newTabsData })
+  const newWindowId = newTabsData[0].windowId
+  console.log(newWindowId, windowData)
+  console.log(newTabsData)
+  // const test = await chrome.storage.local.set({ [sessionTitle]: newTabsData })
+  // console.log(test)
 }
 
 document.querySelector(".saveButton")
