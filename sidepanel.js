@@ -33,8 +33,15 @@ const getTabsData = async () => {
   Update les tabs d'une session déjà enregitrée (bouton refresh)
 */
 const refreshTabs = async () => {
-  const sessionData = await getTabsData()
-  console.log(sessionData)
+  const currentData = await getTabsData()
+  const currentWindowId = currentData[0].windowId
+  const storageData = await chrome.storage.local.get()
+
+  for (const session in storageData) {
+    if (storageData[session][0].windowId === currentWindowId)
+      console.log(session)
+  }
+
 
 
   // const sessionTitle = event.target.parentNode.firstElementChild.textContent
@@ -101,6 +108,10 @@ const openSessionInNewWindow = async (event) => {
   } else {
     chrome.windows.create({ url: urlArray })
   }
+
+  const newTabsData = await getTabsData()
+  // const newWindowId = newTabsData[0].windowId
+  await chrome.storage.local.set({ [sessionTitle]: newTabsData })
 }
 
 document.querySelector(".saveButton")
