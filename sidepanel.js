@@ -22,7 +22,7 @@
   }
   
   /*
-    Récupère les data des tabs dans la fenêtre actuelle
+    Récupère les data des tabs dans la fenêtre actuelle (current window) et retourne un objet avec les data suivantes : url, tabsId, windowId
   */
   const getTabsData = async () => {
     let allTabsData = await chrome.tabs.query({ currentWindow: true })
@@ -40,7 +40,8 @@
   }
   
   /*
-    Update les tabs d'une session déjà enregitrée (bouton refresh)
+    Update les tabs d'une session déjà enregitrée (bouton refresh) via le windowId :
+    Récupère le windowID de la fenêtre actuelle et le compare avec les windowId du storage. Update ensuite la bonne session via un storage set + print sessionList
   */
   const refreshTabs = async () => {
     const currentData = await getTabsData()
@@ -57,7 +58,7 @@
   
   /*
     Supprime une session :
-    Remove la session du storage + réinjecte la sessionList à jour
+    Remove la session du storage + print la sessionList à jour
   */
   const deleteSession = async (event) => {
     const sessionTitle = event.target.parentNode.children[0].textContent
@@ -89,7 +90,8 @@
   }
   
   /*
-  Ouvre une nouvelle fenêtre avec tous les tabs restaurés, lors du click sur la session que l'utilisateur souhaite ouvrir
+    Ouvre une nouvelle fenêtre avec tous les tabs restaurés, lors du click sur la session que l'utilisateur souhaite ouvrir.
+    + MàJ du nouveau windowId dans le storage (pour la fonction refresh)
   */
   const openSession = async (event) => {
     // Récupère les datas de la fenêtre actuelle pour vérifier si c'est une fenêtre de démarrage
