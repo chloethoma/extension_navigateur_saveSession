@@ -13,3 +13,6 @@ JavaScript / HTML / CSS
 - Chrome > Manage extensions > Load unpackaged extesion : select the folder where the files were downloaded
 - The SidePanel can be opens with the extension icon or with the Ctrl+B shortcut
 
+## UI
+![](images/UI.JPG)
+

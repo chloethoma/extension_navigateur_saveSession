@@ -12,7 +12,7 @@
   
   /*
     Injecte dans la div .sessionList une session avec le <template> préfédini dans index.html
-    */
+  */
   const printSession = (sessionArray, sessionTitle) => {
     const template = document.querySelector(".template")
     const element = template.content.firstElementChild.cloneNode(true)
