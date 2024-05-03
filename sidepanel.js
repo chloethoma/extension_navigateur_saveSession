@@ -1,4 +1,15 @@
 /*
+  Injecte dans la div .sessionList une session avec le <template> préfédini dans index.html
+*/
+const printSession = (sessionArray, sessionTitle) => {
+  const template = document.querySelector(".template")
+  const element = template.content.firstElementChild.cloneNode(true)
+  element.querySelector(".title").textContent = sessionTitle
+  element.querySelector(".tabsNumber").textContent = `${sessionArray.length} tabs`
+  document.querySelector(".sessionList").append(element)
+}
+
+/*
   Injecte dans la div .sessionList la liste des sessions disponibles dans le localstorage
 */
   const printSessionList = async () => {
@@ -8,17 +19,23 @@
       printSession(sessionsList[session].tabsData, session)
     }
   }
-  printSessionList()
-  
+
   /*
-    Injecte dans la div .sessionList une session avec le <template> préfédini dans index.html
+    Print le titre de la session en cours dans la div OpenSessionTitle de index.html
+    Permet de savoir à l'ouverture de l'extension si la current window correspond à une session déjà sauvegarder ou s'il s'agit d'une nouvelle session.
   */
-  const printSession = (sessionArray, sessionTitle) => {
-    const template = document.querySelector(".template")
-    const element = template.content.firstElementChild.cloneNode(true)
-    element.querySelector(".title").textContent = sessionTitle
-    element.querySelector(".tabsNumber").textContent = `${sessionArray.length} tabs`
-    document.querySelector(".sessionList").append(element)
+  const printTitle = async () => {
+    const openSessionTitle = document.querySelector(".openSessionTitle")
+    const currentData = await getTabsData()
+    const currentWindowId = currentData.windowId
+    const storageData = await chrome.storage.local.get()
+
+    for (const session in storageData) {
+      if (storageData[session].windowId === currentWindowId) {
+        return openSessionTitle.innerHTML = session
+      }
+    }
+    return openSessionTitle.innerHTML = "NC"
   }
   
   /*
@@ -86,6 +103,7 @@
     const sessionData = await getTabsData()
     
     await chrome.storage.local.set({ [sessionTitle]: sessionData })
+    printTitle()
     printSessionList()
   }
   
@@ -114,12 +132,19 @@
       chrome.tabs.remove(idFirstTab)
       sessionData[sessionTitle].windowId = windowData[0].windowId
       chrome.storage.local.set({[sessionTitle]:sessionData[sessionTitle]})
+      printTitle()
     } else {
       const newWindowData = await chrome.windows.create({ url: urlArray })
       sessionData[sessionTitle].windowId = newWindowData.id
       chrome.storage.local.set({[sessionTitle]:sessionData[sessionTitle]})
     }
   }
+
+/*
+  Print le titre de la session en cours et la sessionList au démarrage de l'extension
+*/
+  printTitle()
+  printSessionList()
   
   document.querySelector(".saveButton")
     .addEventListener("click", addSession)
