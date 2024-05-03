@@ -1,5 +1,5 @@
 /*
-  Injecte dans la div .sessionList une session avec le <template> préfédini dans index.html
+  Injecte dans la div .sessionList une session avec le <template> préfédini dans index.html, à savoir un titre et le nombre de tabs.
 */
 const printSession = (sessionArray, sessionTitle) => {
   const template = document.querySelector(".template")
@@ -13,6 +13,8 @@ const printSession = (sessionArray, sessionTitle) => {
   Injecte dans la div .sessionList la liste des sessions disponibles dans le localstorage
 */
   const printSessionList = async () => {
+    printTitle()
+
     const sessionsList = await chrome.storage.local.get()
     document.querySelector(".sessionList").innerHTML=""
     for (const session in sessionsList) {
@@ -21,11 +23,11 @@ const printSession = (sessionArray, sessionTitle) => {
   }
 
   /*
-    Print le titre de la session en cours dans la div OpenSessionTitle de index.html
-    Permet de savoir à l'ouverture de l'extension si la current window correspond à une session déjà sauvegarder ou s'il s'agit d'une nouvelle session.
+    Print le titre de la session en cours dans la div .openSessionTitle de index.html
+    Permet de savoir à l'ouverture de l'extension si la current window correspond à une session déjà sauvegardée ou s'il s'agit d'une nouvelle session (print NC).
   */
   const printTitle = async () => {
-    const openSessionTitle = document.querySelector(".openSessionTitle")
+    const openSessionTitle = document.querySelector(".currentSessionTitle")
     const currentData = await getTabsData()
     const currentWindowId = currentData.windowId
     const storageData = await chrome.storage.local.get()
@@ -103,7 +105,6 @@ const printSession = (sessionArray, sessionTitle) => {
     const sessionData = await getTabsData()
     
     await chrome.storage.local.set({ [sessionTitle]: sessionData })
-    printTitle()
     printSessionList()
   }
   
@@ -143,7 +144,6 @@ const printSession = (sessionArray, sessionTitle) => {
 /*
   Print le titre de la session en cours et la sessionList au démarrage de l'extension
 */
-  printTitle()
   printSessionList()
   
   document.querySelector(".saveButton")
